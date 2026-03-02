@@ -80,8 +80,6 @@ def timer_electromagnet(target_time):
             while doors.read_sensor() ==True:
                 if time.time() - start >= target_time:
                     break
-            counter += 1  
-        if counter >= 2:
             break
     audio_manager.close_sound()
     doors.close_lock()
