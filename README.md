@@ -161,7 +161,7 @@ sudo journalctl -u api_ctucl_parada.service -f
 | GPIO 27 | Flecha LED |
 | GPIO 21 | Extender actuador |
 | GPIO 20 | Retraer actuador |
-| GPIO (por definir) | Electroimán especial |
+| GPIO 5  | Electroimán especial |
 
 ---
 
