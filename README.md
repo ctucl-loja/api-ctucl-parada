@@ -31,7 +31,7 @@ sudo apt update && sudo apt full-upgrade
 
 ---
 
-## Paso 2. Instalar Python y el entorno virtual
+## Paso 2. Instalar Python y las herramientas para entornos virtuales
 
 ```bash
 sudo apt install python3-virtualenv python3-venv
@@ -39,19 +39,33 @@ sudo apt install python3-virtualenv python3-venv
 
 ---
 
-## Paso 3. Crear un entorno virtual
+## Paso 3. Crear el entorno virtual
 
-Ubíquese en la carpeta del proyecto y ejecute:
+El entorno virtual se almacenará en la carpeta personal del usuario `admin`, independiente del proyecto.
 
 ```bash
-python3 -m venv env
+python3 -m venv /home/admin/env
 ```
 
 ---
 
-## Paso 4. Instalar las dependencias
+## Paso 4. Activar el entorno virtual
+
+> **Importante:** Active el entorno virtual antes de instalar cualquier dependencia. De lo contrario, los paquetes se instalarán en el Python global del sistema y no en el entorno virtual.
 
 ```bash
+source /home/admin/env/bin/activate
+```
+
+---
+
+## Paso 5. Instalar las dependencias
+
+Con el entorno virtual ya activado, ubíquese en la carpeta del proyecto e instale las dependencias:
+
+```bash
+cd /home/admin/api-ctucl-parada
+
 pip install gpiozero
 pip install rpi-lgpio
 pip install flask
@@ -60,14 +74,10 @@ pip install python-dotenv
 pip install paho-mqtt
 ```
 
-También puede instalar todas las dependencias mediante un archivo `requirements.txt` si el proyecto lo incluye.
-
----
-
-## Paso 5. Activar el entorno virtual
+Si el proyecto incluye un archivo `requirements.txt`, puede instalar todas las dependencias con:
 
 ```bash
-source env/bin/activate
+pip install -r requirements.txt
 ```
 
 ---
@@ -75,6 +85,8 @@ source env/bin/activate
 ## Paso 6. Ejecutar la aplicación
 
 ```bash
+cd /home/admin/api-ctucl-parada
+
 python main.py
 ```
 
@@ -101,8 +113,8 @@ After=network.target
 
 [Service]
 User=admin
-WorkingDirectory=/home/admin/api-ctucl-parada/
-ExecStart=/home/admin/env/bin/python3 /home/admin/api-ctucl-parada/main.py
+WorkingDirectory=/home/admin/api-ctucl-parada
+ExecStart=/home/admin/env/bin/python /home/admin/api-ctucl-parada/main.py
 Restart=always
 
 [Install]
@@ -125,25 +137,25 @@ sudo systemctl start api_ctucl_parada
 
 # Comandos útiles para el servicio
 
-Reiniciar el servicio:
+### Reiniciar el servicio
 
 ```bash
 sudo systemctl restart api_ctucl_parada
 ```
 
-Ver el estado del servicio:
+### Ver el estado del servicio
 
 ```bash
 sudo systemctl status api_ctucl_parada
 ```
 
-Detener el servicio:
+### Detener el servicio
 
 ```bash
 sudo systemctl stop api_ctucl_parada
 ```
 
-Ver los registros en tiempo real:
+### Ver los registros en tiempo real
 
 ```bash
 sudo journalctl -u api_ctucl_parada.service -f
@@ -161,7 +173,7 @@ sudo journalctl -u api_ctucl_parada.service -f
 | GPIO 27 | Flecha LED |
 | GPIO 21 | Extender actuador |
 | GPIO 20 | Retraer actuador |
-| GPIO 5  | Electroimán especial |
+| GPIO 5 | Electroimán especial |
 
 ---
 
@@ -176,6 +188,7 @@ sudo journalctl -u api_ctucl_parada.service -f
 
 # Notas
 
-- Se recomienda ejecutar la aplicación siempre dentro del entorno virtual.
+- El entorno virtual se encuentra en **`/home/admin/env`** y es compartido de forma independiente al directorio del proyecto.
+- Active siempre el entorno virtual antes de instalar nuevas dependencias.
 - Verifique que el usuario `admin` tenga permisos para acceder a los GPIO.
 - Si se agregan nuevas dependencias, actualice el archivo `requirements.txt` para facilitar futuras instalaciones.
