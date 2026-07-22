@@ -82,7 +82,7 @@ class GpiosManager():
 
     def special_door_open(self):
         try:
-            self.special_electromagnet.on()
+            self.special_electromagnet.off()
             self.actuator_down.on()
             self.actuator_up.off()
             self.arrow_light.off()
@@ -92,7 +92,7 @@ class GpiosManager():
 
     def special_door_close(self):
         try:
-            self.special_electromagnet.off()
+            self.special_electromagnet.on()
             self.actuator_up.on()
             self.actuator_down.off()
             self.arrow_light.on()
@@ -102,7 +102,8 @@ class GpiosManager():
 
     def special_door_off(self):
         try:
-            self.actuator_down.off()
+            self.special_electromagnet.on()
+            self.actuator_down.on()
             self.actuator_up.off()
             self.arrow_light.on()
             return True
