@@ -165,30 +165,34 @@ sudo journalctl -u api_ctucl_parada.service -f
 
 # Hardware utilizado
 
-## Pines GPIO
+## Diagrama de pines GPIO
 
-| GPIO | Función |
-|------|---------|
-| GPIO 6 | Cerradura |
-| GPIO 27 | Flecha LED |
-| GPIO 21 | Extender actuador |
-| GPIO 20 | Retraer actuador |
-| GPIO 5 | Electroimán especial |
+![Pinout Raspberry Pi](raspberry-pi-gpio-pinout.png)
 
----
+> Puedes obtener el diagrama oficial actualizado en [pinout.xyz](https://pinout.xyz/) 
+> y descargar una captura para colocarla en `docs/img/raspberry-pi-gpio-pinout.png`.
+> Se recomienda anotar sobre la imagen los pines usados por este proyecto (ver tabla abajo).
 
-## Sensores
+## Pines GPIO (salidas)
 
-| GPIO | Descripción |
-|------|-------------|
-| GPIO 16 | Sensor ubicado a 45° |
-| GPIO 26 | Sensor principal (posición normal) |
+| GPIO (BCM) | Variable en código        | Función                          |
+|------------|----------------------------|-----------------------------------|
+| GPIO 6     | `lock`                     | Cerradura del torniquete          |
+| GPIO 5     | `electromagnet`            | Electroimán (puerta normal)       |
+| GPIO 17    | `special_electromagnet`    | Electroimán (puerta especial)     |
+| GPIO 27    | `arrow_light`               | Flecha LED indicadora             |
+| GPIO 21    | `actuator_up`               | Extender actuador (puerta especial) |
+| GPIO 20    | `actuator_down`             | Retraer actuador (puerta especial)  |
 
----
+> **Nota:** todos los pines de salida inician en estado `.on()`, que corresponde 
+> al estado "cerrado/inactivo" según el cableado del relé (lógica activa en bajo).
 
-# Notas
+## Sensores (entradas)
 
-- El entorno virtual se encuentra en **`/home/admin/env`** y es compartido de forma independiente al directorio del proyecto.
-- Active siempre el entorno virtual antes de instalar nuevas dependencias.
-- Verifique que el usuario `admin` tenga permisos para acceder a los GPIO.
-- Si se agregan nuevas dependencias, actualice el archivo `requirements.txt` para facilitar futuras instalaciones.
+| GPIO (BCM) | Variable en código | Descripción                          |
+|------------|---------------------|----------------------------------------|
+| GPIO 16    | `sensor_45`         | Sensor ubicado a 45°                   |
+| GPIO 26    | `sensor`            | Sensor principal (posición normal)     |
+
+> Ambos sensores usan `pull_up=True`, por lo que `read_sensor()` y `read_sensor_45()` 
+> devuelven `True` cuando el valor del pin es `0` (activado, contacto a tierra).
