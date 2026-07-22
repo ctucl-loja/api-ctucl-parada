@@ -28,20 +28,40 @@ class GpiosManager():
     def __init__(self):
         # Pines de salida
         self.lock = DigitalOutputDevice(6)
+        self.electromagnet = DigitalOutputDevice(5)
+        self.special_electromagnet = DigitalOutputDevice(17)
         self.arrow_light = DigitalOutputDevice(27)
         self.actuator_up = DigitalOutputDevice(21)
         self.actuator_down = DigitalOutputDevice(20)
-        self.special_electromagnet = DigitalOutputDevice(5)
         # Pines de sensores
         self.sensor_45 = DigitalInputDevice(16, pull_up=True)
         self.sensor = DigitalInputDevice(26, pull_up=True)
         #estado inicial de pines
         self.lock.on()
+        self.electromagnet.on()
         self.arrow_light.on()
         self.actuator_up.on()
         self.actuator_down.on()
         self.special_electromagnet.on()
        
+
+
+    def open_electromagnet(self):
+        try:
+            self.electromagnet.off()
+            self.arrow_light.off()
+            return True
+        except Exception as e:
+            return False
+
+    def close_electromagnet(self):
+        try:
+            self.electromagnet.on()
+            self.arrow_light.on()
+            return True
+        except Exception as e:
+            return False
+
 
     def open_lock(self):
         try:

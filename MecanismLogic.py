@@ -24,18 +24,14 @@ logger.info("Environment: %s", ENVIRONMENT)
 doors = GpiosManager()
 audio_manager = AudioManager()
 def timer_turnstile(target_time):
-    if doors.read_sensor():
-        _open_turnstile(target_time)
-    else:
+    if not doors.read_sensor():
         logger.info("Puerta bloqueada, esperando a que se abra.")
         doors.close_lock()
         audio_manager.blocked_door_sound()
         while not doors.read_sensor():
             time.sleep(0.1)
-        _open_turnstile(target_time)
 
-
-def _open_turnstile(target_time):
+    # Abrir torniquete
     doors.open_lock()
     audio_manager.open_sound()
     start = time.time()
@@ -53,37 +49,20 @@ def _open_turnstile(target_time):
     doors.close_lock()
     audio_manager.close_sound()
 
-# def _open_turnstile(target_time):
-#     doors.open_lock()
-#     audio_manager.open_sound()
-#     start = time.time()
-
-#     while time.time() - start < target_time:
-#         if doors.read_sensor_45():
-#             hold_start = time.time()
-#             while doors.read_sensor():
-#                 if time.time() - hold_start >= target_time or doors.read_sensor():
-#                     break
-#             break
-
-#     doors.close_lock()
-#     audio_manager.close_sound()
 
 def timer_electromagnet(target_time):
     audio_manager.open_sound()
-    doors.open_lock()
+    doors.open_electromagnet()
     logger.info("ABRIENDO PUERTA ELECTROMAGNETICA")
     start = time.time()
-    counter = 0
     while time.time() - start < target_time:
         if doors.read_sensor() == True:
-            while doors.read_sensor() ==True:
+            while doors.read_sensor() == True:
                 if time.time() - start >= target_time:
                     break
             break
     audio_manager.close_sound()
-    doors.close_lock()
-    logger.info("COUNTER: %s", counter)
+    doors.close_electromagnet()
     logger.info("CERRANDO PUERTA ELECTROMAGNETICA")
 
 
