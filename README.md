@@ -170,7 +170,6 @@ sudo journalctl -u api_ctucl_parada.service -f
 ![Pinout Raspberry Pi](raspberry-pi-gpio-pinout.png)
 
 > Puedes obtener el diagrama oficial actualizado en [pinout.xyz](https://pinout.xyz/) 
-> y descargar una captura para colocarla en `docs/img/raspberry-pi-gpio-pinout.png`.
 > Se recomienda anotar sobre la imagen los pines usados por este proyecto (ver tabla abajo).
 
 ## Pines GPIO (salidas)
